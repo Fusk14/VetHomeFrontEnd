@@ -1,0 +1,251 @@
+/* ========================
+   ARTÍCULO PRINCIPAL
+======================== */
+.main-article {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 32px;
+    color: #111;
+}
+/* ========================
+   TÍTULOS Y TEXTOS
+======================== */
+.main-title {
+    color: #2a9d8f;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    text-align: center;
+}
+.section-title {
+    color: #e76f51;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 28px;
+    margin-bottom: 10px;
+}
+.main-text {
+    color: #222;
+    font-size: 1.08rem;
+    margin-bottom: 10px;
+}
+.main-list {
+    padding-left: 24px;
+    color: #222;
+    font-size: 1.08rem;
+    margin-bottom: 10px;
+}
+/* ========================
+   BOTÓN DE NAVEGACIÓN
+======================== */
+.nav-btn {
+    color: #fff !important;
+    margin: 0 8px;
+    padding: 8px 16px;
+    background: #2a9d8f;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+.nav-btn:hover {
+    background: #21867a;
+    color: #f4a261 !important;
+}
+/* ========================
+   ESTILOS GLOBALES
+======================== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #264653;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================
+   NAVBAR Y ENCABEZADO
+======================== */
+nav {
+    background-color: #2a9d8f;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+nav h1 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* ========================
+   BOTONES PERSONALIZADOS
+======================== */
+.btn-custom {
+    background-color: #e76f51;
+    color: #fff;
+    border-radius: 12px;   /* 🔹 Bordes más suaves */
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.1); /* 🔹 Sombra ligera */
+}
+
+.btn-custom:hover {
+    background-color: #f4a261;
+    transform: translateY(-2px);
+}
+
+/* Variante secundaria */
+.btn-secondary-custom {
+    background-color: #264653;
+    color: #fff;
+    border-radius: 12px;  /* 🔹 Igual, bordes suaves */
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+}
+
+.btn-secondary-custom:hover {
+    background-color: #2a9d8f;
+    transform: translateY(-2px);
+}
+
+/* ========================
+   TARJETAS / CARDS
+======================== */
+.card {
+    border-radius: 15px;
+    box-shadow: 0px 6px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* ========================
+   LINKS
+======================== */
+a {
+    text-decoration: none;
+    color: #2a9d8f;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #e76f51;
+}
+
+/* ========================
+   FOOTER
+======================== */
+footer {
+    background-color: #264653;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* ========================
+   RESPONSIVE
+======================== */
+@media (max-width: 576px) {
+    nav h1 {
+        font-size: 1.5rem;
+    }
+    .btn-custom, .btn-secondary-custom {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* ========================
+   MENÚ LATERAL
+======================== */
+.sidebar {
+    background-color: #264653;  /* Fondo verde oscuro */
+    color: #ffffff;
+    width: 250px;
+    min-height: 100vh;
+    padding: 20px 15px;
+    border-top-right-radius: 15px;   /* 🔹 Bordes redondeados */
+    border-bottom-right-radius: 15px;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1); /* 🔹 Sombra suave */
+}
+
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #f4a261; /* 🔹 Un poco de contraste */
+}
+
+.sidebar .nav-link {
+    color: #ffffff;
+    padding: 12px 15px;
+    margin: 6px 0;
+    border-radius: 10px; /* 🔹 Bordes suaves */
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #2a9d8f; /* 🔹 Verde claro */
+    color: #fff;
+    transform: translateX(5px); /* 🔹 Pequeña animación */
+}
+
+/* ========================
+   BOTONES GLOBAL
+======================== */
+button,
+.btn,
+a.btn {
+    border-radius: 12px !important;  /* 🔹 Forzar bordes suaves */
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+    font-weight: 600;
+}
+
+/* Eliminar el verde default de Bootstrap */
+.btn-primary {
+    background-color: #e76f51 !important;
+    border: none !important;
+}
+
+.btn-primary:hover {
+    background-color: #f4a261 !important;
+}
+
+.btn-secondary {
+    background-color: #264653 !important;
+    border: none !important;
+}
+
+.btn-secondary:hover {
+    background-color: #2a9d8f !important;
+}

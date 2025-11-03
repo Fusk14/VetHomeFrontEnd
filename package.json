@@ -1,0 +1,31 @@
+{
+  "name": "veterinaria-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.17.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "@vitejs/plugin-react-swc": "^3.2.0",
+    "jsdom": "^27.1.0",
+    "typescript": "^5.5.0",
+    "vite": "^7.1.12",
+    "vitest": "^4.0.6"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  }
+}
