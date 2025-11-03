@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type User = {
@@ -52,4 +52,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AuthContext.Provider>
   )
+}
+
+// ✅ Hook auxiliar para usar y mockear fácilmente
+export function useAuth() {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be used within an AuthProvider')
+  return ctx
 }
