@@ -38,16 +38,7 @@ body{
 
 main{ padding: 0 20px 40px; max-width:1200px; margin:0 auto }
 
-/* Hero */
-.home-hero{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:24px; margin: 28px 0 40px; padding: 28px; border-radius: var(--radius);
-  background: linear-gradient(90deg, rgba(42,157,143,0.08), rgba(231,111,81,0.03));
-  box-shadow: var(--card-shadow);
-}
-.home-hero .hero-left{max-width:640px}
-.home-hero h1{font-size:28px; margin:0 0 8px; color:var(--text)}
-.home-hero p{color:var(--muted); margin:0}
+
 
 /* Buttons */
 .btn{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:10px; border: none; cursor:pointer; font-weight:600; transition:transform .12s ease, box-shadow .12s ease}
@@ -110,4 +101,23 @@ main{ padding: 0 20px 40px; max-width:1200px; margin:0 auto }
   .popup-alerts{left:12px; right:12px; bottom:12px}
   .popup-alert{width:auto}
   main{padding:20px}
+}
+.home-hero {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    margin-top: 20px;
+}
+
+.home-hero img {
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-hero img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.4);
 }
