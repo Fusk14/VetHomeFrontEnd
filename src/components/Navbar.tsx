@@ -11,7 +11,6 @@ export default function Navbar() {
       <Link to="/nosotros" className="nav-btn">Nosotros</Link>
       <Link to="/blogs" className="nav-btn">Blogs</Link>
       <Link to="/contacto" className="nav-btn">Contacto</Link>
-      <Link to="/detalle" className="nav-btn">Detalle Producto</Link>
       {user && user.rol === 'admin' && <Link to="/admin" className="nav-btn">Admin</Link>}
       <Link to="/inventario" className="nav-btn">Productos</Link>
       <Link to="/mascotas" className="nav-btn">Mascotas</Link>

@@ -7,7 +7,7 @@ import Blogs from './pages/Blogs'
 import Blog1 from './pages/Blog1'
 import Blog2 from './pages/Blog2'
 import Contacto from './pages/Contacto'
-import DetalleProducto from './pages/DetalleProducto'
+
 import Inventario from './pages/Inventario'
 import Mascotas from './pages/Mascotas'
 import Consultas from './pages/Consultas'
@@ -37,7 +37,6 @@ export default function App() {
             <Route path="/blogs/1" element={<Blog1 />} />
             <Route path="/blogs/2" element={<Blog2 />} />
             <Route path="/contacto" element={<Contacto />} />
-            <Route path="/detalle" element={<DetalleProducto />} />
             <Route path="/inventario" element={<Inventario />} />
             <Route path="/mascotas" element={<Mascotas />} />
             <Route path="/consultas" element={<Consultas />} />
