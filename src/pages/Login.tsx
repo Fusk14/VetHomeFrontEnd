@@ -60,9 +60,10 @@ export default function Login() {
           id="correo"
           maxLength={100}
           placeholder="usuario@duoc.cl / usuario@profesor.duoc.cl / usuario@gmail.com"
+          aria-describedby="correo-validation"
         />
-        {correoValid === false && <div className="invalid-feedback">Correo inválido. Use @duoc.cl, @profesor.duoc.cl o @gmail.com (máx 100 caracteres).</div>}
-        {correoValid === true && <div className="valid-feedback">Correo válido.</div>}
+        {correoValid === false && <div id="correo-validation" className="invalid-feedback">Correo inválido. Use @duoc.cl, @profesor.duoc.cl o @gmail.com (máx 100 caracteres).</div>}
+        {correoValid === true && <div id="correo-validation" className="valid-feedback">Correo válido.</div>}
 
         <label htmlFor="contrasena" className="main-text">Contraseña</label>
         <input
@@ -71,9 +72,10 @@ export default function Login() {
           value={contrasena}
           onChange={e => { setContrasena(e.target.value); validatePass(e.target.value) }}
           id="contrasena"
+          aria-describedby="password-validation"
         />
-        {passValid === false && <div className="invalid-feedback">La contraseña debe tener entre 4 y 10 caracteres.</div>}
-        {passValid === true && <div className="valid-feedback">Contraseña válida.</div>}
+        {passValid === false && <div id="password-validation" className="invalid-feedback">La contraseña debe tener entre 4 y 10 caracteres.</div>}
+        {passValid === true && <div id="password-validation" className="valid-feedback">Contraseña válida.</div>}
 
         <button className="btn-custom" type="submit">Entrar</button>
       </form>

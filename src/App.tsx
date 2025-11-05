@@ -24,8 +24,8 @@ export default function App() {
   return (
     <AlertProvider>
       <AuthProvider>
-        <div>
-        <header>
+        <div className="app-container">
+        <header className="app-header">
           <Navbar />
         </header>
 

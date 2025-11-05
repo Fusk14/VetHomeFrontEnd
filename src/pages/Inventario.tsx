@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useAlert } from '../context/AlertContext'
 
 type Producto = {
   producto: string
@@ -35,54 +36,53 @@ export default function Inventario() {
     }
   }
 
+  const { showAlert } = useAlert()
+
   function vaciarCarro() {
     if (confirm('¿Vaciar carro?')) setCarro([])
   }
 
   function realizarOrden() {
-    if (carro.length === 0) { alert('Tu carrito está vacío.'); return }
-    alert('Orden generada. Gracias por tu compra')
+    if (carro.length === 0) { showAlert('Tu carrito está vacío.', 'error'); return }
+    showAlert('Orden generada. Gracias por tu compra', 'success')
     setCarro([])
   }
 
   const total = carro.reduce((s, it) => s + it.precio * it.cantidad, 0)
 
   return (
-    <section className="main-article">
+    <section className="main-article blogs-section">
       <h1 className="main-title">Productos</h1>
-      <div className="row">
-        <div id="listaProductos" className="col-md-8">
-          <div className="d-flex flex-wrap" style={{ gap: 16 }}>
-            {productos.map((p, i) => (
-              <div key={i} style={{ width: 220 }} className="card p-2">
-                <img src={p.imagen} alt={p.producto} style={{ width: '100%', borderRadius: 8 }} />
-                <h4>{p.producto}</h4>
-                <p>Precio: ${p.precio.toLocaleString()}</p>
-                <input type="number" defaultValue={1} min={1} id={`cantidad-${i}`} />
-                <button className="btn-custom" onClick={() => {
-                  const cantidad = parseInt((document.getElementById(`cantidad-${i}`) as HTMLInputElement).value) || 1
-                  agregarAlCarro(p, cantidad)
-                }}>Agregar al carrito</button>
-              </div>
-            ))}
-          </div>
-        </div>
-        <aside className="col-md-4">
-          <h3>Carrito</h3>
-          <ul id="listaCarro">
-            {carro.length === 0 && <li className="list-group-item">Carrito vacío</li>}
-            {carro.map((item, idx) => (
-              <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
-                <span>{item.producto} x{item.cantidad}</span>
-                <strong>${(item.precio * item.cantidad).toLocaleString()}</strong>
-              </li>
-            ))}
-          </ul>
-          <p>Total: <strong id="totalCarro">${total.toLocaleString()}</strong></p>
-          <button className="btn-secondary-custom" id="vaciarCarro" onClick={vaciarCarro}>Vaciar carro</button>
-          <button className="btn-custom" id="realizarOrden" onClick={realizarOrden}>Realizar orden</button>
-        </aside>
+      <div className="blogs-list">
+        {productos.map((p, i) => (
+          <article key={i} className="blog-card">
+            <img src={p.imagen} alt={p.producto} className="blog-card-img" />
+            <h2 className="blog-card-title">{p.producto}</h2>
+            <p>Precio: ${p.precio.toLocaleString()}</p>
+            <input type="number" defaultValue={1} min={1} id={`cantidad-${i}`} className="input-contacto" />
+            <button className="btn-custom" onClick={() => {
+              const cantidad = parseInt((document.getElementById(`cantidad-${i}`) as HTMLInputElement).value) || 1
+              agregarAlCarro(p, cantidad)
+            }}>Agregar al carrito</button>
+          </article>
+        ))}
       </div>
+
+      <aside className="col-md-4">
+        <h3>Carrito</h3>
+        <ul id="listaCarro">
+          {carro.length === 0 && <li className="list-group-item">Carrito vacío</li>}
+          {carro.map((item, idx) => (
+            <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+              <span>{item.producto} x{item.cantidad}</span>
+              <strong>${(item.precio * item.cantidad).toLocaleString()}</strong>
+            </li>
+          ))}
+        </ul>
+        <p>Total: <strong id="totalCarro">${total.toLocaleString()}</strong></p>
+        <button className="btn-secondary-custom" id="vaciarCarro" onClick={vaciarCarro}>Vaciar carro</button>
+        <button className="btn-custom" id="realizarOrden" onClick={realizarOrden}>Realizar orden</button>
+      </aside>
     </section>
   )
 }

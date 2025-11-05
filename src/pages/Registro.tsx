@@ -75,9 +75,10 @@ export default function Registro() {
     id="correo"
     maxLength={100}
     placeholder="usuario@duoc.cl"
+    aria-describedby="correo-validation"
   />
-  {correoValid === false && <div className="invalid-feedback">Correo inválido. Use @duoc.cl, @profesor.duoc.cl o @gmail.com (máx 100 caracteres).</div>}
-  {correoValid === true && <div className="valid-feedback">Correo válido.</div>}
+  {correoValid === false && <div id="correo-validation" className="invalid-feedback">Correo inválido. Use @duoc.cl, @profesor.duoc.cl o @gmail.com (máx 100 caracteres).</div>}
+  {correoValid === true && <div id="correo-validation" className="valid-feedback">Correo válido.</div>}
   <label htmlFor="telefono" className="main-text">Teléfono (opcional)</label>
   <input className="input-contacto" value={telefono} onChange={e => setTelefono(e.target.value)} id="telefono" placeholder="+56 9 1234 5678" />
   <div className="form-text">Opcional. Se usará para contacto.</div>
@@ -88,9 +89,10 @@ export default function Registro() {
           value={contrasena}
           onChange={e => { setContrasena(e.target.value); validatePass(e.target.value); validateRepetir(repetirContrasena, e.target.value) }}
           id="contrasena"
+          aria-describedby="password-validation"
         />
-        {passValid === false && <div className="invalid-feedback">La contraseña debe tener entre 4 y 10 caracteres.</div>}
-        {passValid === true && <div className="valid-feedback">Contraseña válida.</div>}
+        {passValid === false && <div id="password-validation" className="invalid-feedback">La contraseña debe tener entre 4 y 10 caracteres.</div>}
+        {passValid === true && <div id="password-validation" className="valid-feedback">Contraseña válida.</div>}
         <label htmlFor="repetirContrasena" className="main-text">Repetir contraseña</label>
         <input
           className={`input-contacto ${repetirValid === false ? 'is-invalid' : repetirValid === true ? 'is-valid' : ''}`}
@@ -98,9 +100,10 @@ export default function Registro() {
           value={repetirContrasena}
           onChange={e => { setRepetirContrasena(e.target.value); validateRepetir(e.target.value) }}
           id="repetirContrasena"
+          aria-describedby="repetir-validation"
         />
-        {repetirValid === false && <div className="invalid-feedback">Las contraseñas no coinciden.</div>}
-        {repetirValid === true && <div className="valid-feedback">Las contraseñas coinciden.</div>}
+        {repetirValid === false && <div id="repetir-validation" className="invalid-feedback">Las contraseñas no coinciden.</div>}
+        {repetirValid === true && <div id="repetir-validation" className="valid-feedback">Las contraseñas coinciden.</div>}
         <button className="btn-custom" type="submit">Registrar</button>
       </form>
     </section>
