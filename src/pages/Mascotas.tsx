@@ -11,6 +11,7 @@ type Mascota = {
   observaciones?: string
 }
 
+
 export default function Mascotas() {
   const [mascotas, setMascotas] = useState<Mascota[]>([])
   const [nombre, setNombre] = useState('')
@@ -22,15 +23,18 @@ export default function Mascotas() {
   const [genero, setGenero] = useState('')
   const [observaciones, setObservaciones] = useState('')
 
+  //Carga todas las mascotas 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('mascotas') || '[]')
     setMascotas(saved)
   }, [])
 
+  //guarda mascotas
   useEffect(() => {
     localStorage.setItem('mascotas', JSON.stringify(mascotas))
   }, [mascotas])
 
+  //valida campos
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!nombre || !tipo || edad === '') {
@@ -41,7 +45,7 @@ export default function Mascotas() {
     setMascotas(prev => [...prev, m])
     setNombre(''); setTipo('perro'); setRaza(''); setColor(''); setEdad(''); setPeso(''); setGenero(''); setObservaciones('')
   }
-
+//pagina
   return (
     <section className="main-article">
       <h1 className="main-title">Mascotas</h1>

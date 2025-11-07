@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+// Definición del tipo de usuario
+
 type User = {
   nombre: string
   correo: string
@@ -28,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (stored) setUser(JSON.parse(stored))
   }, [])
 
+
   const login = (u: User) => {
     setUser(u)
     localStorage.setItem('auth_user', JSON.stringify(u))
@@ -54,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-// ✅ Hook auxiliar para usar y mockear fácilmente
+// Hook auxiliar para usar 
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used within an AuthProvider')
