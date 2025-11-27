@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAlert } from '../context/AlertContext'
+import { register as registerService } from '../services/authService'
 
 export default function Registro() {
   const [nombre, setNombre] = useState('')
+  const [apellido, setApellido] = useState('')
+  const [rut, setRut] = useState('')
   const [correo, setCorreo] = useState('')
   const [telefono, setTelefono] = useState('')
   const [contrasena, setContrasena] = useState('')
@@ -11,6 +14,7 @@ export default function Registro() {
   const [correoValid, setCorreoValid] = useState<boolean | null>(null)
   const [passValid, setPassValid] = useState<boolean | null>(null)
   const [repetirValid, setRepetirValid] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { showAlert } = useAlert()
   // regex shared with Login
@@ -28,9 +32,8 @@ export default function Registro() {
     setRepetirValid(value === base && value.length > 0)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]')
     // run validators and set visual states
     validateCorreo(correo)
     validatePass(contrasena)
@@ -51,23 +54,61 @@ export default function Registro() {
       return
     }
 
-    if (usuarios.find((u: any) => u.correo === correo)) {
-      showAlert('Correo ya registrado', 'error')
+    if (!nombre.trim()) {
+      showAlert('El nombre es requerido', 'error')
       return
     }
-    usuarios.push({ nombre, correo, contrasena, telefono: telefono || '', rol: 'cliente' })
-    localStorage.setItem('usuarios', JSON.stringify(usuarios))
-    showAlert('Registro exitoso', 'success')
-    navigate('/login')
+
+    if (!apellido.trim()) {
+      showAlert('El apellido es requerido', 'error')
+      return
+    }
+
+    if (!rut.trim()) {
+      showAlert('El RUT es requerido', 'error')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const result = await registerService({
+        rut: rut.trim(),
+        nombre: nombre.trim(),
+        apellido: apellido.trim(),
+        correo: correo.trim(),
+        telefono: telefono.trim() || '+56900000000',
+        contrasena: contrasena,
+        rolNombre: 'CLIENTE', // Rol por defecto para nuevos usuarios
+      })
+
+      if (result.success) {
+        showAlert('Registro exitoso', 'success')
+        navigate('/login')
+      } else {
+        showAlert(result.error || 'Error al registrar usuario', 'error')
+      }
+    } catch (error) {
+      showAlert('Error de conexión. Verifica que los microservicios estén corriendo.', 'error')
+      console.error('Error en registro:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <section className="main-article">
       <h1 className="main-title">Registro</h1>
       <form id="registroForm" onSubmit={handleSubmit}>
+        <label htmlFor="rut" className="main-text">RUT</label>
+        <input className="input-contacto" value={rut} onChange={e => setRut(e.target.value)} id="rut" placeholder="12345678-9" required />
+        
         <label htmlFor="nombre" className="main-text">Nombre</label>
-        <input className="input-contacto" value={nombre} onChange={e => setNombre(e.target.value)} id="nombre" />
-  <label htmlFor="correo" className="main-text">Correo</label>
+        <input className="input-contacto" value={nombre} onChange={e => setNombre(e.target.value)} id="nombre" required />
+        
+        <label htmlFor="apellido" className="main-text">Apellido</label>
+        <input className="input-contacto" value={apellido} onChange={e => setApellido(e.target.value)} id="apellido" required />
+        
+        <label htmlFor="correo" className="main-text">Correo</label>
   <input
     className={`input-contacto ${correoValid === false ? 'is-invalid' : correoValid === true ? 'is-valid' : ''}`}
     value={correo}
@@ -104,7 +145,9 @@ export default function Registro() {
         />
         {repetirValid === false && <div id="repetir-validation" className="invalid-feedback">Las contraseñas no coinciden.</div>}
         {repetirValid === true && <div id="repetir-validation" className="valid-feedback">Las contraseñas coinciden.</div>}
-        <button className="btn-custom" type="submit">Registrar</button>
+        <button className="btn-custom" type="submit" disabled={isLoading}>
+          {isLoading ? 'Registrando...' : 'Registrar'}
+        </button>
       </form>
     </section>
   )

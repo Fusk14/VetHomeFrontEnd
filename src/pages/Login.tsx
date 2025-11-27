@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAlert } from '../context/AlertContext'
+import { login as loginService } from '../services/authService'
 
 export default function Login() {
   const { login } = useAuth()
@@ -9,6 +10,7 @@ export default function Login() {
   const [contrasena, setContrasena] = useState('')
   const [correoValid, setCorreoValid] = useState<boolean | null>(null)
   const [passValid, setPassValid] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { showAlert } = useAlert()
 
@@ -25,7 +27,7 @@ export default function Login() {
     setPassValid(len >= 4 && len <= 10)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     validateCorreo(correo)
     validatePass(contrasena)
@@ -35,17 +37,32 @@ export default function Login() {
       return
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]')
-    const usuario = usuarios.find((u: any) => u.correo === correo && u.contrasena === contrasena)
-    if (!usuario) {
-      showAlert('Credenciales inválidas. Verifica tus datos o regístrate.', 'error')
-      return
+    setIsLoading(true)
+    try {
+      const result = await loginService({ correo, contrasena })
+      
+      if (result.success && result.user) {
+        // Adaptar el usuario del microservicio al formato esperado por AuthContext
+        const user = {
+          nombre: result.user.nombre,
+          correo: result.user.correo,
+          rol: result.user.rol?.nombre?.toLowerCase() || 'cliente',
+          id: result.user.id,
+          apellido: result.user.apellido,
+          telefono: result.user.telefono,
+        }
+        login(user)
+        showAlert(`Inicio de sesión exitoso. Bienvenido ${result.user.nombre}`, 'success')
+        navigate('/')
+      } else {
+        showAlert(result.error || 'Credenciales inválidas. Verifica tus datos o regístrate.', 'error')
+      }
+    } catch (error) {
+      showAlert('Error de conexión. Verifica que los microservicios estén corriendo.', 'error')
+      console.error('Error en login:', error)
+    } finally {
+      setIsLoading(false)
     }
-
-    const user = { nombre: usuario.nombre, correo: usuario.correo, rol: usuario.rol || 'cliente' }
-    login(user)
-    showAlert('Inicio de sesión exitoso. Bienvenido ' + usuario.nombre, 'success')
-    navigate('/')
   }
 
   return (
@@ -77,7 +94,9 @@ export default function Login() {
         {passValid === false && <div id="password-validation" className="invalid-feedback">La contraseña debe tener entre 4 y 10 caracteres.</div>}
         {passValid === true && <div id="password-validation" className="valid-feedback">Contraseña válida.</div>}
 
-        <button className="btn-custom" type="submit">Entrar</button>
+        <button className="btn-custom" type="submit" disabled={isLoading}>
+          {isLoading ? 'Iniciando sesión...' : 'Entrar'}
+        </button>
       </form>
     </section>
   )

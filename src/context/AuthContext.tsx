@@ -2,10 +2,13 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { useNavigate } from 'react-router-dom'
 
 // Definición del tipo de usuario
-
+// Compatible con el formato del microservicio y el formato local
 type User = {
+  id?: number
   nombre: string
+  apellido?: string
   correo: string
+  telefono?: string
   rol: string
 }
 

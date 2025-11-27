@@ -68,20 +68,24 @@ export default function Inventario() {
         ))}
       </div>
 
-      <aside className="col-md-4">
-        <h3>Carrito</h3>
-        <ul id="listaCarro">
+      <aside className="cart-sidebar">
+        <h3 className="section-title">Carrito</h3>
+        <ul className="cart-list" id="listaCarro">
           {carro.length === 0 && <li className="list-group-item">Carrito vacío</li>}
           {carro.map((item, idx) => (
-            <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+            <li key={idx} className="list-group-item cart-item">
               <span>{item.producto} x{item.cantidad}</span>
               <strong>${(item.precio * item.cantidad).toLocaleString()}</strong>
             </li>
           ))}
         </ul>
-        <p>Total: <strong id="totalCarro">${total.toLocaleString()}</strong></p>
-        <button className="btn-secondary-custom" id="vaciarCarro" onClick={vaciarCarro}>Vaciar carro</button>
-        <button className="btn-custom" id="realizarOrden" onClick={realizarOrden}>Realizar orden</button>
+        <div className="cart-total">
+          <p>Total: <strong id="totalCarro">${total.toLocaleString()}</strong></p>
+        </div>
+        <div className="cart-actions">
+          <button className="btn-secondary-custom" id="vaciarCarro" onClick={vaciarCarro}>Vaciar carro</button>
+          <button className="btn-custom" id="realizarOrden" onClick={realizarOrden}>Realizar orden</button>
+        </div>
       </aside>
     </section>
   )

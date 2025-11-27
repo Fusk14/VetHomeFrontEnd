@@ -68,43 +68,141 @@ footer p {
 ======================== */
 nav {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
-  padding: 16px;
+  padding: 0;
   text-align: center;
   box-shadow: 0 3px 8px rgba(0,0,0,0.12);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-bar {
+  position: relative;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  position: relative;
+}
+
+.nav-logo {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.nav-menu-toggle {
+  display: none;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  gap: 6px;
+  z-index: 1002;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+}
+
+.nav-menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.nav-menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.nav-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.nav-menu {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
+  width: 100%;
+  padding: 0 16px 16px;
+}
+
+.nav-menu-content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.nav-overlay {
+  display: none;
 }
 
 .nav-btn {
   color: #fff !important;
-  margin: 0 8px;
+  margin: 0;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   display: inline-block;
   font-weight: 600;
   letter-spacing: 0.3px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
   text-decoration: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
   font-size: 0.9rem;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
 }
 
 .nav-btn:hover {
-  background: linear-gradient(135deg, #27ae60, #2ecc71);
-  color: #e8ffe8 !important;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff !important;
   transform: translateY(-2px);
-  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.nav-btn-primary {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.nav-btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-btn-logout {
+  background: rgba(231, 76, 60, 0.3);
+}
+
+.nav-btn-logout:hover {
+  background: rgba(231, 76, 60, 0.5);
+}
+
+.nav-divider {
+  display: none;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 8px 0;
 }
 
 /* ========================
@@ -268,6 +366,14 @@ nav {
   color: var(--accent);
   font-weight: 600;
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  width: 100%;
 }
 
 .blog-card-link:hover {
@@ -904,16 +1010,102 @@ nav {
 }
 
 /* ========================
+   CARRITO
+======================== */
+.cart-sidebar {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+}
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: white;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-total {
+  margin: 20px 0;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cart-actions button {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* ========================
    RESPONSIVE
 ======================== */
+@media (max-width: 1024px) {
+  .admin-container {
+    flex-direction: column;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  /* Navbar para tablets */
+  .nav-menu {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .nav-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
 @media (max-width: 768px){
   .home-hero {
     flex-direction: column;
     text-align: center;
   }
   
+  .home-hero img {
+    max-width: 100%;
+    height: auto;
+  }
+  
   .admin-container {
     flex-direction: column;
+    gap: 16px;
   }
   
   .section-header {
@@ -929,18 +1121,133 @@ nav {
     width: 100%;
   }
   
-  .nav-bar {
+  /* Navbar responsive */
+  .nav-header {
+    padding: 12px 16px;
+  }
+  
+  .nav-logo {
+    font-size: 1.3rem;
+  }
+  
+  .nav-menu-toggle {
+    display: flex;
+  }
+  
+  .nav-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    padding: 80px 20px 20px;
+    box-shadow: none;
+    border-radius: 0;
+    z-index: 1001;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  .nav-menu-open {
+    display: block !important;
+  }
+  
+  .nav-menu-content {
     flex-direction: column;
-    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .nav-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   
   .nav-btn {
-    width: 200px;
+    width: 100%;
+    margin: 0;
     text-align: center;
+    padding: 14px 20px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+  }
+  
+  .nav-divider {
+    display: block;
+  }
+  
+  .main-article {
+    padding: 24px;
+    margin: 0 10px;
+  }
+  
+  .blogs-list {
+    flex-direction: column;
+  }
+  
+  .blog-card {
+    min-width: 100%;
+  }
+  
+  .main-title {
+    font-size: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 480px){
+  .nav-header {
+    padding: 10px 12px;
+  }
+  
+  .nav-logo {
+    font-size: 1.2rem;
+  }
+  
+  .nav-menu {
+    padding: 70px 16px 16px;
+  }
+  
+  .nav-menu-content {
+    max-width: 100%;
+  }
+  
   .popup-alerts {
     left: 12px;
     right: 12px;
@@ -949,26 +1256,94 @@ nav {
   
   .popup-alert {
     width: auto;
+    min-width: auto;
   }
   
   main {
-    padding: 20px;
+    padding: 12px;
   }
   
   .action-buttons {
     flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-buttons button {
+    width: 100%;
   }
   
   .contacto-actions {
     flex-direction: column;
   }
   
+  .contacto-actions button {
+    width: 100%;
+  }
+  
   .main-article {
-    padding: 20px;
-    margin: 0 10px;
+    padding: 16px;
+    margin: 0;
+    border-radius: 12px;
   }
   
   .main-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+  
+  .main-text {
+    font-size: 1rem;
+  }
+  
+  .btn-custom,
+  .btn-secondary-custom {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-table {
+    font-size: 0.85rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+  }
+  
+  .home-hero img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .blog-card-img {
+    height: 180px;
+  }
+  
+  .cart-sidebar {
+    margin-top: 24px;
+    padding: 16px;
+  }
+  
+  .cart-actions {
+    flex-direction: column;
+  }
+  
+  .cart-actions button {
+    width: 100%;
   }
 }
