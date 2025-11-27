@@ -58,11 +58,15 @@ export async function apiRequest<T>(
   const finalHeaders = { ...defaultHeaders, ...headers }
 
   try {
+    console.log(`[API] ${method} ${url}`, body ? { body } : '')
+    
     const response = await fetch(url, {
       method,
       headers: finalHeaders,
       body: body ? JSON.stringify(body) : undefined,
     })
+
+    console.log(`[API] Response status: ${response.status} ${response.statusText}`)
 
     // Intentar parsear la respuesta como JSON
     let data: T | undefined
@@ -79,8 +83,10 @@ export async function apiRequest<T>(
 
     // Si la respuesta no es exitosa, retornar error
     if (!response.ok) {
+      const errorMessage = typeof data === 'string' ? data : `Error ${response.status}: ${response.statusText}`
+      console.error(`[API] Error en ${url}:`, errorMessage)
       return {
-        error: typeof data === 'string' ? data : `Error ${response.status}: ${response.statusText}`,
+        error: errorMessage,
         status: response.status,
       }
     }
@@ -90,8 +96,19 @@ export async function apiRequest<T>(
       status: response.status,
     }
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Error de conexión'
+    console.error(`[API] Error de conexión en ${url}:`, errorMessage)
+    
+    // Si es un error de CORS, proporcionar un mensaje más útil
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      return {
+        error: 'Error de conexión. Verifica que el microservicio esté corriendo y que CORS esté configurado correctamente.',
+        status: 0,
+      }
+    }
+    
     return {
-      error: error instanceof Error ? error.message : 'Error de conexión',
+      error: errorMessage,
       status: 0,
     }
   }

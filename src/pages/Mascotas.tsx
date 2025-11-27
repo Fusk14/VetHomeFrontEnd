@@ -1,49 +1,89 @@
 import React, { useState, useEffect } from 'react'
-
-type Mascota = {
-  nombre: string
-  tipo: string
-  raza?: string
-  color?: string
-  edad: string
-  peso?: string
-  genero?: string
-  observaciones?: string
-}
-
+import { useAuth } from '../context/AuthContext'
+import { useAlert } from '../context/AlertContext'
+import { getAllMascotas, createMascota } from '../services/mascotasService'
+import type { Mascota } from '../types/api.types'
 
 export default function Mascotas() {
+  const { user } = useAuth()
+  const { showAlert } = useAlert()
   const [mascotas, setMascotas] = useState<Mascota[]>([])
   const [nombre, setNombre] = useState('')
   const [tipo, setTipo] = useState('perro')
   const [raza, setRaza] = useState('')
-  const [color, setColor] = useState('')
   const [edad, setEdad] = useState('')
-  const [peso, setPeso] = useState('')
-  const [genero, setGenero] = useState('')
-  const [observaciones, setObservaciones] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  //Carga todas las mascotas 
+  // Carga todas las mascotas desde la API
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('mascotas') || '[]')
-    setMascotas(saved)
-  }, [])
+    const loadMascotas = async () => {
+      setIsLoading(true)
+      const result = await getAllMascotas()
+      if (result.error) {
+        showAlert('Error al cargar mascotas: ' + result.error, 'error')
+      } else if (result.data) {
+        // Filtrar solo las mascotas del usuario actual
+        if (user?.id) {
+          const userMascotas = result.data.filter(m => m.idCliente === user.id)
+          setMascotas(userMascotas)
+        } else {
+          setMascotas(result.data)
+        }
+      }
+      setIsLoading(false)
+    }
+    loadMascotas()
+  }, [showAlert, user])
 
-  //guarda mascotas
-  useEffect(() => {
-    localStorage.setItem('mascotas', JSON.stringify(mascotas))
-  }, [mascotas])
-
-  //valida campos
-  const handleSubmit = (e: React.FormEvent) => {
+  // Valida campos y guarda en la API
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!nombre || !tipo || edad === '') {
-      alert('Debes completar Nombre, Tipo y Edad')
+    
+    if (!user?.id) {
+      showAlert('Debes iniciar sesión para agregar mascotas', 'error')
       return
     }
-    const m: Mascota = { nombre, tipo, raza, color, edad, peso, genero, observaciones }
-    setMascotas(prev => [...prev, m])
-    setNombre(''); setTipo('perro'); setRaza(''); setColor(''); setEdad(''); setPeso(''); setGenero(''); setObservaciones('')
+
+    if (!nombre || !tipo || !edad) {
+      showAlert('Debes completar Nombre, Tipo y Edad', 'error')
+      return
+    }
+
+    const edadNum = parseInt(edad)
+    if (isNaN(edadNum) || edadNum < 0) {
+      showAlert('La edad debe ser un número válido', 'error')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const nuevaMascota = {
+        idCliente: user.id,
+        nombre: nombre.trim(),
+        especie: tipo,
+        raza: raza.trim() || 'Sin raza',
+        edad: edadNum,
+      }
+
+      const result = await createMascota(nuevaMascota)
+      
+      if (result.error) {
+        showAlert('Error al crear mascota: ' + result.error, 'error')
+      } else if (result.data) {
+        showAlert('Mascota agregada exitosamente', 'success')
+        setMascotas(prev => [...prev, result.data!])
+        // Limpiar formulario
+        setNombre('')
+        setTipo('perro')
+        setRaza('')
+        setEdad('')
+      }
+    } catch (error) {
+      showAlert('Error de conexión. Verifica que el microservicio esté corriendo.', 'error')
+      console.error('Error en registro de mascota:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 //pagina
   return (
@@ -63,35 +103,30 @@ export default function Mascotas() {
         <label className="main-text">Raza</label>
         <input className="input-contacto" id="raza" value={raza} onChange={e => setRaza(e.target.value)} />
 
-        <label className="main-text">Color</label>
-        <input className="input-contacto" id="color" value={color} onChange={e => setColor(e.target.value)} />
+        <label className="main-text">Edad (años)</label>
+        <input className="input-contacto" id="edad" type="number" min="0" value={edad} onChange={e => setEdad(e.target.value)} />
 
-        <label className="main-text">Edad</label>
-        <input className="input-contacto" id="edad" value={edad} onChange={e => setEdad(e.target.value)} />
-
-        <label className="main-text">Peso (kg)</label>
-        <input className="input-contacto" id="peso" value={peso} onChange={e => setPeso(e.target.value)} />
-
-        <label className="main-text">Género</label>
-        <input className="input-contacto" id="genero" value={genero} onChange={e => setGenero(e.target.value)} />
-
-        <label className="main-text">Observaciones</label>
-        <textarea className="input-contacto" id="observaciones" value={observaciones} onChange={e => setObservaciones(e.target.value)} />
-
-        <button type="submit" className="btn-custom">Agregar mascota</button>
+        <button type="submit" className="btn-custom" disabled={isLoading}>
+          {isLoading ? 'Guardando...' : 'Agregar mascota'}
+        </button>
       </form>
 
       <div>
         <h2 className="section-title">Listado</h2>
-        <ul id="listaMascotas">
-          {mascotas.map((m, i) => (
-            <li key={i} className="list-group-item">
-              <strong>{m.nombre}</strong> ({m.tipo}{m.raza ? ', ' + m.raza : ''})<br />
-              Edad: {m.edad} años{m.peso ? ' | Peso: ' + m.peso + ' kg' : ''}{m.color ? ' | Color: ' + m.color : ''}{m.genero ? ' | ' + m.genero : ''}
-              {m.observaciones ? <div><em>Obs: {m.observaciones}</em></div> : null}
-            </li>
-          ))}
-        </ul>
+        {isLoading && mascotas.length === 0 ? (
+          <p className="main-text">Cargando mascotas...</p>
+        ) : mascotas.length === 0 ? (
+          <p className="main-text">No hay mascotas registradas</p>
+        ) : (
+          <ul id="listaMascotas">
+            {mascotas.map((m) => (
+              <li key={m.id} className="list-group-item">
+                <strong>{m.nombre}</strong> ({m.especie}{m.raza ? ', ' + m.raza : ''})<br />
+                Edad: {m.edad} años
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   )

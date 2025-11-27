@@ -35,11 +35,22 @@ export const login = async (credentials: LoginRequest): Promise<{ success: boole
  * Registra un nuevo usuario
  */
 export const register = async (userData: RegisterRequest): Promise<{ success: boolean; user?: Usuario; error?: string }> => {
-  const url = buildApiUrl(API_CONFIG.USUARIOS, `${AUTH_PATH}/register`)
+  // Intentar primero con /api/auth/register
+  let url = buildApiUrl(API_CONFIG.USUARIOS, `${AUTH_PATH}/register`)
+  console.log('Intentando registro en:', url)
   
-  const response = await apiPost<Usuario>(url, userData)
+  let response = await apiPost<Usuario>(url, userData)
+  
+  // Si falla con 404, intentar con /api/usuarios como fallback
+  if (response.status === 404) {
+    console.log('Endpoint /api/auth/register no encontrado, intentando con /api/usuarios')
+    url = buildApiUrl(API_CONFIG.USUARIOS, USUARIOS_PATH)
+    console.log('Intentando registro en (fallback):', url)
+    response = await apiPost<Usuario>(url, userData)
+  }
   
   if (response.error) {
+    console.error('Error en registro:', response.error, 'Status:', response.status)
     return { success: false, error: response.error }
   }
 
