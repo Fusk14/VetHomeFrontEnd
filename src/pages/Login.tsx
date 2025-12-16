@@ -43,10 +43,14 @@ export default function Login() {
       
       if (result.success && result.user) {
         // Adaptar el usuario del microservicio al formato esperado por AuthContext
+        // Mapear ADMINISTRATIVO a admin para compatibilidad con el frontend
+        const rolNombre = result.user.rol?.nombre?.toLowerCase() || 'cliente'
+        const rolMapeado = rolNombre === 'administrativo' ? 'admin' : rolNombre
+        
         const user = {
           nombre: result.user.nombre,
           correo: result.user.correo,
-          rol: result.user.rol?.nombre?.toLowerCase() || 'cliente',
+          rol: rolMapeado as 'cliente' | 'admin',
           id: result.user.id,
           apellido: result.user.apellido,
           telefono: result.user.telefono,
@@ -101,3 +105,4 @@ export default function Login() {
     </section>
   )
 }
+

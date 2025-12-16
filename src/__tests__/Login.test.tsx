@@ -44,7 +44,7 @@ vi.mock('../context/AlertContext', async (importOriginal) => {
   }
 })
 
-describe('Login', () => {
+describe('Login', () => { 
   const renderLogin = () => render(
     <MemoryRouter>
       <Login />

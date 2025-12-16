@@ -65,20 +65,6 @@ export interface Resena {
   comentario: string
 }
 
-// ==================== NOTIFICACIONES ====================
-export interface Notificacion {
-  id?: number
-  idUsuario: number
-  mensaje: string
-}
-
-// ==================== INVENTARIO ====================
-export interface Medicamento {
-  id?: number
-  nombre: string
-  stock: number
-  fechaVencimiento: string
-}
 
 export interface Producto {
   id?: number
@@ -87,5 +73,6 @@ export interface Producto {
   stock?: number
   imagen?: string
 }
+
 
 

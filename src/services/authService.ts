@@ -14,18 +14,15 @@ const USUARIOS_PATH = '/api/usuarios'
 export const login = async (credentials: LoginRequest): Promise<{ success: boolean; user?: Usuario; error?: string }> => {
   const url = buildApiUrl(API_CONFIG.USUARIOS, `${AUTH_PATH}/login`)
   
-  const response = await apiPost<{ message?: string }>(url, credentials)
+  const response = await apiPost<Usuario>(url, credentials)
   
   if (response.error) {
     return { success: false, error: response.error }
   }
 
-  // Si el login es exitoso, obtener el usuario por correo
-  if (response.status === 200) {
-    const usuarioResponse = await getUsuarioByCorreo(credentials.correo)
-    if (usuarioResponse.data) {
-      return { success: true, user: usuarioResponse.data }
-    }
+  // El login ahora devuelve directamente el usuario completo
+  if (response.status === 200 && response.data) {
+    return { success: true, user: response.data }
   }
 
   return { success: false, error: 'Credenciales inválidas' }
@@ -120,5 +117,6 @@ export const createUsuario = async (usuario: Omit<Usuario, 'id'>): Promise<{ dat
 
   return { data: response.data }
 }
+
 
 
